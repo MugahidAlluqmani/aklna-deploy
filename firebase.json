@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": "AKALNA",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "nextApp"
+      }
+    ]
+  },
+  "functions": {
+    "source": "./functions"
+  }
+
+}

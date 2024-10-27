@@ -22,9 +22,9 @@ export default function Home() {
   const canvasRef = useRef(null); // Ref to the canvas to capture the image
 
   useEffect(() => {
+    // جلب المهام الخاصة بالمستخدم بعد تسجيل الدخول فقط
     if (user) {
-      // Fetch tasks only if the user is logged in
-      const tasksRef = ref(database, 'tasks/');
+      const tasksRef = ref(database, `tasks/${user.uid}`);
       onValue(tasksRef, (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -33,6 +33,8 @@ export default function Home() {
             ...data[key],
           }));
           setTasks(formattedTasks);
+        } else {
+          setTasks([]); // إذا لم يكن هناك بيانات، تعيين المهام كقائمة فارغة
         }
       });
     }
@@ -130,25 +132,31 @@ export default function Home() {
   };
 
   // Add a new task
+  
   const addTask = () => {
-    if (taskInput && taskSelectOption && imageInput ) {
-      const tasksRef = ref(database, 'tasks/');
+    if (taskInput.trim() && imageInput && user) {
+      const tasksRef = ref(database, `tasks/${user.uid}`);
       const newTaskRef = push(tasksRef);
       set(newTaskRef, {
         text: taskInput,
         selectOption: taskSelectOption,
         imageUrl: imageInput,
+        user: user.uid, // حفظ المهمة تحت معرف المستخدم (UID)
       });
       setTaskInput('');
       setImageInput(null);
     }
   };
 
+
+
   // Delete a task
+
   const deleteTask = (id) => {
-    const taskRef = ref(database, `tasks/${id}`);
+    const taskRef = ref(database, `tasks/${user.uid}/${id}`);
     remove(taskRef);
   };
+
 
   // Start editing a task
   const editTask = (id, text, selectOption, imageUrl) => {
@@ -159,8 +167,9 @@ export default function Home() {
   };
 
   // Save the edited task
+
   const saveTask = (id) => {
-    const taskRef = ref(database, `tasks/${id}`);
+    const taskRef = ref(database, `tasks/${user.uid}/${id}`);
     update(taskRef, {
       text: editInput,
       selectOption: editTaskSelectOption,
@@ -168,6 +177,7 @@ export default function Home() {
     });
     setIsEditing(null);
   };
+
 
 
   return (

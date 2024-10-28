@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useRef } from 'react';
 
-export default function cameraPage(){
+export default function CameraPage(){
     const [image, setImage] = useState(null); // لتخزين الصورة الملتقطة
     const [isFrontCamera, setIsFrontCamera] = useState(false); // للتحقق من نوع الكاميرا المستخدمة
     const videoRef = useRef(null);

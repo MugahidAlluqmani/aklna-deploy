@@ -70,7 +70,7 @@ export default function CameraPage(){
         <div style={{ textAlign: 'center' }}>
       {!image ? (
         <>
-          <video ref={videoRef} style={{ display: 'none' }} /> {/* إخفاء الفيديو */}
+          <video ref={videoRef} style={{ display: 'inline' }} /> {/* إخفاء الفيديو */}
           <button onClick={startCamera}>فتح الكاميرا</button>
           <button onClick={takePicture}>التقاط الصورة</button>
           <button onClick={toggleCamera}>
@@ -83,7 +83,7 @@ export default function CameraPage(){
           <img src={image} alt="Captured" style={{ maxWidth: '100%' }} />
         </>
       )}
-      <canvas ref={canvasRef} style={{ display: 'none' }} /> {/* إخفاء الكانفاس */}
+      <canvas ref={canvasRef} style={{ display: 'inline' }} /> {/* إخفاء الكانفاس */}
     </div>
 
         </>

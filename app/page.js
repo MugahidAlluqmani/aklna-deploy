@@ -2,7 +2,9 @@
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from 'react';
 import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut } from './firebaseConfig';
-
+import { requestNotificationPermission, onMessageListener } from './firebaseConfig';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
@@ -303,6 +305,11 @@ export default function Home() {
           </li>
         ))}
       </ul>
+
+      <div>
+      <h1>Firebase Messaging Notifications</h1>
+      <ToastContainer />
+    </div>
     </div>
     
 );

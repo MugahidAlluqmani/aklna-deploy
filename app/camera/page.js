@@ -1,11 +1,25 @@
 "use client"
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export default function CameraPage(){
     const [image, setImage] = useState(null); // لتخزين الصورة الملتقطة
     const [isFrontCamera, setIsFrontCamera] = useState(false); // للتحقق من نوع الكاميرا المستخدمة
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+  
+
+    useEffect(() => {
+      // طلب إذن الإشعارات عند تحميل التطبيق
+      requestNotificationPermission();
+  
+      // الاستماع للإشعارات
+      onMessageListener()
+        .then((payload) => {
+          console.log('Message received: ', payload);
+          toast.info(`${payload.notification.title}: ${payload.notification.body}`);
+        })
+        .catch((err) => console.log('Error listening for messages: ', err));
+    }, []);
   
 
   // تشغيل الكاميرا بناءً على نوع الكاميرا (أمامية أو خلفية)
@@ -83,7 +97,7 @@ export default function CameraPage(){
           <img src={image} alt="Captured" style={{ maxWidth: '100%' }} />
         </>
       )}
-      <canvas ref={canvasRef} style={{ display: 'inline' }} /> {/* إخفاء الكانفاس */}
+      <canvas ref={canvasRef} style={{ display: 'none' }} /> {/* إخفاء الكانفاس */}
     </div>
 
         </>

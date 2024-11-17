@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut } from './firebaseConfig';
 import { getMessaging, getToken, onMessage} from "firebase/messaging";
 import { initializeApp } from "firebase/app";
-
 const firebaseConfig = {
   apiKey: "AIzaSyDwRmXALG8cE3U2pGio670j27N0HFXAnWs",
   authDomain: "aklna-62ccc.firebaseapp.com",
@@ -17,7 +16,7 @@ const firebaseConfig = {
 };
 
 export default function Home() {
-
+/*
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       const app = initializeApp(firebaseConfig);
@@ -53,17 +52,17 @@ export default function Home() {
         console.log("Message received in foreground: ", payload);
 
         // عرض إشعار يدوي
-        const notificationTitle = payload.notification.title || "Default Title";
+        const notificationTitle = payload.notification.title;
         const notificationOptions = {
-          body: payload.notification.body || "Default Body",
-          icon: payload.notification.icon || "/firebase-logo.png",
+          body: payload.notification.body,
+          icon: payload.notification.icon,
         };
 
         new Notification(notificationTitle, notificationOptions);
       });
     }
   }, []);
-
+*/
 
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState('');

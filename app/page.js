@@ -2,11 +2,69 @@
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from 'react';
 import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut } from './firebaseConfig';
-import { requestNotificationPermission, onMessageListener } from './firebaseConfig';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { getMessaging, getToken, onMessage} from "firebase/messaging";
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDwRmXALG8cE3U2pGio670j27N0HFXAnWs",
+  authDomain: "aklna-62ccc.firebaseapp.com",
+  databaseURL: "https://aklna-62ccc-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "aklna-62ccc",
+  storageBucket: "aklna-62ccc.appspot.com",
+  messagingSenderId: "999018453356",
+  appId: "1:999018453356:web:5f318ce94a5bf62610bb49",
+  measurementId: "G-Q0E0GZ1H31"
+};
 
 export default function Home() {
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+
+      // تسجيل Service Worker
+      navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+        getToken(messaging, {
+          vapidKey: "BF5aiNgR55vkSFThnnyn9GEoD97NmSgCxRkykaaeN1NATWjX1bgI96khLuXeVCf1lPdVjiMta9AZiCdOGMFmfPs",
+          serviceWorkerRegistration: registration,
+        })
+          .then((currentToken) => {
+            if (currentToken) {
+              console.log("FCM Token:", currentToken);
+            } else {
+              console.warn("No registration token available.");
+            }
+          })
+          .catch((err) => console.error("Error getting FCM token: ", err));
+      });
+
+      // طلب الإذن للإشعارات
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Notification permission granted.");
+        } else {
+          console.warn("Notification permission denied.");
+        }
+      });
+
+      // استقبال الرسائل في المقدمة
+      onMessage(messaging, (payload) => {
+        console.log("Message received in foreground: ", payload);
+
+        // عرض إشعار يدوي
+        const notificationTitle = payload.notification.title || "Default Title";
+        const notificationOptions = {
+          body: payload.notification.body || "Default Body",
+          icon: payload.notification.icon || "/firebase-logo.png",
+        };
+
+        new Notification(notificationTitle, notificationOptions);
+      });
+    }
+  }, []);
+
+
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState('');
   const [taskSelectOption, setTaskSelectOption] = useState('');
@@ -22,6 +80,7 @@ export default function Home() {
 
   const videoRef = useRef(null); // Ref to the video element
   const canvasRef = useRef(null); // Ref to the canvas to capture the image
+
 
   useEffect(() => {
     // جلب المهام الخاصة بالمستخدم بعد تسجيل الدخول فقط
@@ -184,6 +243,13 @@ export default function Home() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
+      <button onClick={()=>{    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+      } else {
+        console.warn("Notification permission denied.");
+      }
+    });}}>Anable Alert</button>
       <h1>To-Do List</h1>
             {/* User is not logged in */}
             {!user ? (
@@ -307,8 +373,6 @@ export default function Home() {
       </ul>
 
       <div>
-      <h1>Firebase Messaging Notifications</h1>
-      <ToastContainer />
     </div>
     </div>
     

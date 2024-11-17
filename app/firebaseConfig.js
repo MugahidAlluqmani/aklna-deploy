@@ -23,7 +23,7 @@ const database = getDatabase(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Initialize Firebase Cloud Messaging
+/*Initialize Firebase Cloud Messaging
 const messaging = getMessaging(app);
  const requestPermission = async () => {
   try {
@@ -47,5 +47,6 @@ const messaging = getMessaging(app);
       resolve(payload);
     });
   });
+  */
 // Export database and authentication functions
-export { database, ref, set, push, onValue, update, remove, auth, provider, signInWithPopup, signOut, requestPermission, onMessageListener};
+export { database, ref, set, push, onValue, update, remove, auth, provider, signInWithPopup, signOut};

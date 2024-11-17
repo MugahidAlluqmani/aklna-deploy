@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from 'react';
-import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut,requestPermission, onMessageListener } from './firebaseConfig';
+import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut} from './firebaseConfig';
 import { getMessaging, getToken, onMessage} from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 const firebaseConfig = {
@@ -21,23 +21,8 @@ export default function Home() {
   const [notificationBody, setNotificationBody] = useState();
   const [notificationImage, setNotificationImage] = useState();
 
-  useEffect(() => {
-    // طلب الإذن
-    requestPermission();
 
-    // الاستماع للإشعارات
-    onMessageListener()
-      .then((payload) => {
-        console.log("Message received: ", payload);
-        setNotificationTitle(payload.notification.title);
-        setNotificationBody(payload.notification.body);
-        setNotificationImage(payload.notification.image);
 
-      })
-      .catch((err) => console.error("Failed to receive message: ", err));
-  }, []);
-
-/*
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       const app = initializeApp(firebaseConfig);
@@ -74,16 +59,15 @@ export default function Home() {
 
         // عرض إشعار يدوي
         const notificationTitle = payload.notification.title;
-        const notificationOptions = {
-          body: payload.notification.body,
-          icon: payload.notification.icon,
-        };
+        setNotificationTitle(payload.notification.title);
+        setNotificationBody(payload.notification.body);
+        setNotificationImage(payload.notification.image);
 
         new Notification(notificationTitle, notificationOptions);
       });
     }
   }, []);
-*/
+
 
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState('');

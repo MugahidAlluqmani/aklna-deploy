@@ -22,53 +22,6 @@ export default function Home() {
   const [notificationImage, setNotificationImage] = useState();
   const [isToken, setIsToken] = useState();
 
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      const app = initializeApp(firebaseConfig);
-      const messaging = getMessaging(app);
-
-      // تسجيل Service Worker
-      navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
-        getToken(messaging, {
-          vapidKey: "BF5aiNgR55vkSFThnnyn9GEoD97NmSgCxRkykaaeN1NATWjX1bgI96khLuXeVCf1lPdVjiMta9AZiCdOGMFmfPs",
-          serviceWorkerRegistration: registration,
-        })
-          .then((currentToken) => {
-            if (currentToken) {
-              console.log("FCM Token:", currentToken);
-              //setIsToken(currentToken);
-            } else {
-              console.warn("No registration token available.");
-            }
-          })
-          .catch((err) => console.error("Error getting FCM token: ", err));
-      });
-
-      // طلب الإذن للإشعارات
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          console.log("Notification permission granted.");
-        } else {
-          console.warn("Notification permission denied.");
-        }
-      });
-
-      // استقبال الرسائل في المقدمة
-      onMessage(messaging, (payload) => {
-        console.log("Message received in foreground: ", payload);
-
-        // عرض إشعار يدوي
-        setNotificationTitle(payload.notification.title);
-        setNotificationBody(payload.notification.body);
-        setNotificationImage(payload.notification.image);
-
-        console.log(notificationTitle)
-        //new Notification(notificationTitle, notificationOptions);
-      });
-    }
-  }, []);
-
-
   const [tasks, setTasks] = useState([]);
   const [taskInput, setTaskInput] = useState('');
   const [taskSelectOption, setTaskSelectOption] = useState('');
@@ -85,6 +38,51 @@ export default function Home() {
   const videoRef = useRef(null); // Ref to the video element
   const canvasRef = useRef(null); // Ref to the canvas to capture the image
 
+  useEffect(() => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+      } else {
+        console.warn("Notification permission denied.");
+      }
+    });
+    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(app);
+            // الاستماع للرسائل في المقدمة
+            onMessage(messaging, (payload) => {
+              console.log("Message received in foreground: ", payload);
+      
+              // عرض الإشعار يدويًا
+              if (Notification.permission === "granted") {
+                const notificationTitle = payload.notification?.title || "Default Title";
+                const notificationOptions = {
+                  body: payload.notification?.body || "Default Body",
+                  icon: payload.notification?.icon || "/default-icon.png",
+                };
+      
+                new Notification(notificationTitle, notificationOptions);
+              
+              }
+          })
+      navigator.serviceWorker.register("/firebase-messaging-sw.js").then((registration) => {
+        getToken(messaging, {
+          vapidKey: "BF5aiNgR55vkSFThnnyn9GEoD97NmSgCxRkykaaeN1NATWjX1bgI96khLuXeVCf1lPdVjiMta9AZiCdOGMFmfPs",
+          serviceWorkerRegistration: registration,
+        })
+          .then((currentToken) => {
+            if (currentToken) {
+              console.log("FCM Token:", currentToken);
+            } else {
+              console.warn("No registration token available.");
+            }
+          })
+          .catch((err) => {
+            console.error("Error getting FCM token: ", err);
+          });
+      });
+    }
+  },[]);
 
   useEffect(() => {
     // جلب المهام الخاصة بالمستخدم بعد تسجيل الدخول فقط

@@ -243,13 +243,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
-      <button onClick={()=>{    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.log("Notification permission granted.");
-      } else {
-        console.warn("Notification permission denied.");
-      }
-    });}}>Anable Alert</button>
+      <h2>Test Firebase Cloud Messaging</h2>
       <h1>To-Do List</h1>
             {/* User is not logged in */}
             {!user ? (

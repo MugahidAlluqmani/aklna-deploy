@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from 'react';
-import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut } from './firebaseConfig';
+import { database, ref, push, set, onValue, remove, update, auth, provider, signInWithPopup, signOut,requestPermission, onMessageListener } from './firebaseConfig';
 import { getMessaging, getToken, onMessage} from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 const firebaseConfig = {
@@ -16,6 +16,18 @@ const firebaseConfig = {
 };
 
 export default function Home() {
+  useEffect(() => {
+    // طلب الإذن
+    requestPermission();
+
+    // الاستماع للإشعارات
+    onMessageListener()
+      .then((payload) => {
+        console.log("Message received: ", payload);
+      })
+      .catch((err) => console.error("Failed to receive message: ", err));
+  }, []);
+
 /*
   useEffect(() => {
     if ("serviceWorker" in navigator) {

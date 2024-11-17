@@ -36,7 +36,7 @@ export default function Home() {
           .then((currentToken) => {
             if (currentToken) {
               console.log("FCM Token:", currentToken);
-              setIsToken(currentToken);
+              //setIsToken(currentToken);
             } else {
               console.warn("No registration token available.");
             }
@@ -248,7 +248,6 @@ export default function Home() {
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
       <h2>Test Firebase Cloud Messaging</h2>
-      <p>Token: {isToken}</p>
       <h5>Notification Title: {notificationTitle}</h5>
       <h5>Notification Body: {notificationBody}</h5>
       <h5>Notification Image: {notificationImage}</h5>

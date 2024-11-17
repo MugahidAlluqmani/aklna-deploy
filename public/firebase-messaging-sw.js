@@ -1,4 +1,4 @@
-
+  "use client"
   // [START messaging_init_in_sw]
   // Give the service worker access to Firebase Messaging.
   // Note that you can only use Firebase Messaging here. Other Firebase libraries
@@ -9,7 +9,6 @@
 
   // Initialize the Firebase app in the service worker by passing in
   // your app's Firebase config object.
-  // https://firebase.google.com/docs/web/setup#config-object
   const firebaseConfig = {
     apiKey: "AIzaSyDwRmXALG8cE3U2pGio670j27N0HFXAnWs",
     authDomain: "aklna-62ccc.firebaseapp.com",

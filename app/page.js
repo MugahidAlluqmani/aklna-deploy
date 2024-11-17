@@ -16,6 +16,11 @@ const firebaseConfig = {
 };
 
 export default function Home() {
+  
+  const [notificationTitle, setNotificationTitle] = useState();
+  const [notificationBody, setNotificationBody] = useState();
+  const [notificationImage, setNotificationImage] = useState();
+
   useEffect(() => {
     // طلب الإذن
     requestPermission();
@@ -24,6 +29,10 @@ export default function Home() {
     onMessageListener()
       .then((payload) => {
         console.log("Message received: ", payload);
+        setNotificationTitle(payload.notification.title);
+        setNotificationBody(payload.notification.body);
+        setNotificationImage(payload.notification.image);
+
       })
       .catch((err) => console.error("Failed to receive message: ", err));
   }, []);
@@ -255,6 +264,9 @@ export default function Home() {
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
       <h2>Test Firebase Cloud Messaging</h2>
+      <h5>Notification Title: {notificationTitle}</h5>
+      <h5>Notification Body: {notificationBody}</h5>
+      <h5>Notification Image: {notificationImage}</h5>
       <h1>To-Do List</h1>
             {/* User is not logged in */}
             {!user ? (

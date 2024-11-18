@@ -40,6 +40,15 @@ export default function Home() {
 
   // PushAlert
   useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+          .then(function(registration) {
+              console.log('PushAlert Service Worker Registered', registration);
+          })
+          .catch(function(error) {
+              console.error('PushAlert Service Worker Registration Failed', error);
+          });
+  }
     const script = document.createElement('script');
     script.src = "https://cdn.pushalert.co/integrate_d3c3432e4022c72d33721683528144b0.js";
     script.async = true;

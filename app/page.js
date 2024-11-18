@@ -38,6 +38,18 @@ export default function Home() {
   const videoRef = useRef(null); // Ref to the video element
   const canvasRef = useRef(null); // Ref to the canvas to capture the image
 
+  // PushAlert
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "https://cdn.pushalert.co/integrate_d3c3432e4022c72d33721683528144b0.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+        document.body.removeChild(script); // تنظيف عند إلغاء المكون
+    };
+}, []);
+
   useEffect(() => {
     Notification.requestPermission().then((permission) => {
       if (permission === "granted") {
@@ -245,6 +257,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: '20px', maxWidth: '600px', margin: 'auto' }}>
+      <h1>Test PushAlert</h1>
       <h2>Test Firebase Cloud Messaging</h2>
       <h5>Notification Title: {notificationTitle}</h5>
       <h5>Notification Body: {notificationBody}</h5>
